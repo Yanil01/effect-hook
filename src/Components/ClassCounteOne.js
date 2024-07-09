@@ -6,8 +6,8 @@ class ClassCounteOne extends Component {
 
     // Initialize state
     this.state = {
-      count: 0,
-      name: "",
+      count: 0, // Initialize count state variable to 0
+      name: "", // Initialize name state variable as empty string
     };
   }
 
@@ -20,14 +20,14 @@ class ClassCounteOne extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.count !== this.state.count) {
       console.log("Updating document title...");
-      document.title = `Clicked ${this.state.count} times`;
+      document.title = `Clicked ${this.state.count} times`; // Update document title when count changes
     }
-    // Update document title after state change
   }
 
   render() {
     return (
       <div>
+        {/* Input field for name */}
         <input
           type="text"
           value={this.state.name}
@@ -35,8 +35,9 @@ class ClassCounteOne extends Component {
             this.setState({ name: e.target.value });
           }}
         />
+        {/* Button to increment count */}
         <button
-          onClick={() => this.setState({ count: this.state.count + 1 })} // Increment count on button click
+          onClick={() => this.setState({ count: this.state.count + 1 })}
           style={{ cursor: "pointer" }}
         >
           Click {this.state.count} times
