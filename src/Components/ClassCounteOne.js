@@ -7,6 +7,7 @@ class ClassCounteOne extends Component {
     // Initialize state
     this.state = {
       count: 0,
+      name: "",
     };
   }
 
@@ -17,12 +18,23 @@ class ClassCounteOne extends Component {
 
   // Lifecycle method: runs after a component update
   componentDidUpdate(prevProps, prevState) {
-    document.title = `Clicked ${this.state.count} times`; // Update document title after state change
+    if (prevState.count !== this.state.count) {
+      console.log("Updating document title...");
+      document.title = `Clicked ${this.state.count} times`;
+    }
+    // Update document title after state change
   }
 
   render() {
     return (
       <div>
+        <input
+          type="text"
+          value={this.state.name}
+          onChange={(e) => {
+            this.setState({ name: e.target.value });
+          }}
+        />
         <button
           onClick={() => this.setState({ count: this.state.count + 1 })} // Increment count on button click
           style={{ cursor: "pointer" }}
