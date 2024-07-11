@@ -2,34 +2,57 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function DataFetching() {
-  // Initialize state to store posts data
-  const [posts, setPosts] = useState([]);
+  const [post, setPost] = useState(null); // Initialize post state to null
+  const [id, setId] = useState(1);
+  const [idFromButtonClick, setIdFromButtonClick] = useState(1);
+  const [loading, setLoading] = useState(false); // State to track loading status
+  const [error, setError] = useState(null); // State to track errors
 
-  // useEffect hook to perform side effects (like data fetching) in function components
+  const handleClick = () => {
+    setIdFromButtonClick(id);
+  };
+
   useEffect(() => {
-    // Using axios to make a GET request to fetch posts data
+    setLoading(true); // Set loading to true before making the API call
     axios
-      .get("https://jsonplaceholder.typicode.com/posts")
+      .get(`https://jsonplaceholder.typicode.com/posts/${idFromButtonClick}`)
       .then((res) => {
-        // Logging the response to the console
-        console.log(res);
-        // Updating the posts state with the fetched data
-        setPosts(res.data);
+        setPost(res.data); // Update post state with fetched data
+        setLoading(false); // Set loading to false after successful fetch
+        setError(null); // Reset error state
       })
       .catch((err) => {
-        // Logging any errors to the console
-        console.log(err);
+        console.error("Error fetching data:", err);
+        setLoading(false); // Set loading to false in case of error
+        setError("Error fetching data. Please try again."); // Set error message
       });
-  }, []); // Empty dependency array ensures this effect runs only once after the initial render
+  }, [idFromButtonClick]);
 
   return (
-    <div>
-      <ul>
-        {/* Mapping over posts state to display each post's title in a list */}
-        {posts.map((post) => (
-          <li key={post.id}>{post.title}</li>
-        ))}
-      </ul>
+    <div style={{ maxWidth: "600px", margin: "auto", padding: "20px" }}>
+      <h2>Fetch Post</h2>
+      <div style={{ marginBottom: "10px" }}>
+        <input
+          type="number"
+          value={id}
+          onChange={(e) => setId(e.target.value)}
+          style={{ marginRight: "10px", padding: "5px" }}
+        />
+        <button onClick={handleClick} style={{ padding: "5px 10px" }}>
+          Fetch Post
+        </button>
+      </div>
+
+      {loading && <p>Loading...</p>}
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {post && (
+        <div>
+          <h3>{post.title}</h3>
+          <p>{post.body}</p>
+        </div>
+      )}
     </div>
   );
 }
